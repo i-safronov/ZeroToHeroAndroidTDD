@@ -4,32 +4,21 @@ import android.widget.Button
 import android.widget.TextView
 import java.io.Serializable
 
-interface UiState: Serializable {
-
-    val text: String
+interface UiState : Serializable {
 
     fun apply(textView: TextView, button: Button)
 
-    abstract class UiStateUtil : UiState {
-        override fun equals(other: Any?): Boolean {
-            if (other !is UiState) return false
-            return other.text == text
-        }
-
-        override fun hashCode(): Int {
-            return javaClass.hashCode()
-        }
-    }
-
-    class Base(override val text: String) : UiStateUtil(), UiState {
+    abstract class UiStateUtil(private val text: String) : UiState {
         override fun apply(textView: TextView, button: Button) {
             textView.text = text
         }
     }
 
-    class Max(override val text: String) : UiStateUtil(), UiState {
+    data class Base(private val text: String) : UiStateUtil(text = text), UiState
+
+    data class Max(private val text: String) : UiStateUtil(text = text), UiState {
         override fun apply(textView: TextView, button: Button) {
-            textView.text = text
+            super.apply(textView, button)
             button.isEnabled = false
         }
     }
