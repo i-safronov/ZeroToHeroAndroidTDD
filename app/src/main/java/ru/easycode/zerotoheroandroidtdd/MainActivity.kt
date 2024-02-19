@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     private val count = Count.Base(
         step = COUNT_STEP, max = COUNT_MAX
     )
-    private var stateWrapper: StateWrapper = StateWrapper.Base(count = count)
+    private var state: UiState = UiState.Base("0")
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,50 +26,27 @@ class MainActivity : AppCompatActivity() {
         button = findViewById(R.id.incrementButton)
 
         button.setOnClickListener {
-            stateWrapper = StateWrapper.Base(count = count)
-            stateWrapper.apply(text = text, button = button)
+            state = count.increment(text.text.toString())
+            state.apply(textView = text, button = button)
         }
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putSerializable(KEY, stateWrapper)
+        outState.putSerializable(KEY, state)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        stateWrapper = savedInstanceState.getSerializable(KEY) as StateWrapper
-        stateWrapper.apply(text = text, button = button)
+        state = savedInstanceState.getSerializable(KEY) as UiState
+        state.apply(textView = text, button = button)
     }
 
     companion object {
         private const val COUNT_STEP = 2
         private const val COUNT_MAX = 4
         private const val KEY = "key"
-    }
-
-}
-
-interface StateWrapper : Serializable {
-
-    fun apply(text: TextView, button: Button)
-
-    class Base(
-        private val count: Count
-    ) : StateWrapper {
-
-        override fun apply(text: TextView, button: Button) {
-            when (val checkResult = count.check(text.text.toString())) {
-                is UiState.Max -> {
-                    checkResult.apply(textView = text, button = button)
-                }
-                is UiState.Base -> {
-                    count.increment(text.text.toString())
-                        .apply(textView = text, button = button)
-                }
-            }
-        }
-
     }
 
 }

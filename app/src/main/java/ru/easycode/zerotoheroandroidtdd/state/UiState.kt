@@ -2,8 +2,9 @@ package ru.easycode.zerotoheroandroidtdd.state
 
 import android.widget.Button
 import android.widget.TextView
+import java.io.Serializable
 
-interface UiState {
+interface UiState: Serializable {
 
     val text: String
 

@@ -30,6 +30,7 @@ class CountTest {
 
         var actual: UiState = count.increment(number = "0")
         var expected: UiState = UiState.Base(text = "3")
+        println("e: ${expected.text}, a: ${actual.text}")
         assertEquals(expected, actual)
 
         actual = count.increment(number = "3")
