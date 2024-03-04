@@ -5,6 +5,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.easycode.zerotoheroandroidtdd.data.model.SimpleResponse
+import ru.easycode.zerotoheroandroidtdd.data.service.retrofit.SimpleService
 
 /**
  * Hint for success: use encoded true for url
