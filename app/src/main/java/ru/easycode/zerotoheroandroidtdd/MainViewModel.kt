@@ -16,17 +16,16 @@ import ru.easycode.zerotoheroandroidtdd.domain.Repository
 import java.io.Serializable
 
 class MainViewModel(
-    private val liveDataWrapper: LiveDataWrapper = LiveDataWrapper.Base(),
+    private val liveDataWrapper: LiveDataWrapper.Mutable = LiveDataWrapper.Base(),
     private val repository: Repository
 ) : ViewModel(), LiveDataProperty {
 
     private val scope = CoroutineScope(Dispatchers.IO)
 
     fun load() {
+        liveDataWrapper.update(UiState.ShowProgress)
         scope.launch {
-            liveDataWrapper.update(UiState.ShowProgress)
-            val response = repository.load()
-            liveDataWrapper.update(UiState.ShowData(text = response.text))
+            repository.load().show(liveDataWrapper)
         }
     }
 
@@ -80,12 +79,19 @@ interface LiveDataProperty {
 
 interface LiveDataWrapper : LiveDataProperty {
 
-    fun save(bundleWrapper: BundleWrapper.Save)
-    fun update(value: UiState)
+    interface Save : LiveDataWrapper {
+        fun save(bundleWrapper: BundleWrapper.Save)
+    }
+
+    interface Update : LiveDataWrapper {
+        fun update(value: UiState)
+    }
+
+    interface Mutable : Save, Update
 
     class Base(
         private val liveData: SingleLiveEvent<UiState> = SingleLiveEvent()
-    ) : LiveDataWrapper {
+    ) : Mutable {
 
         override fun save(bundleWrapper: BundleWrapper.Save) {
             liveData.value?.let {
