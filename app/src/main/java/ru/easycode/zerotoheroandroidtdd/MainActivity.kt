@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -14,48 +16,52 @@ import ru.easycode.zerotoheroandroidtdd.databinding.ElementViewBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var vm: MainViewModel
     private val adapter = Adapter()
-    private val gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        vm = (application as App).vm()
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
 
         binding.actionButton.setOnClickListener {
-            adapter.add(binding.inputEditText.text.toString().trim())
+            vm.add(binding.inputEditText.text.toString())
             binding.inputEditText.setText("")
+        }
+
+        vm.liveData().observe(this) {
+            adapter.replace(it.map { it.toString() })
         }
 
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        val toTypedArray = gson.toJson(adapter.items())
-        outState.putString(KEY, toTypedArray)
+        vm.save(BundleWrapper.Base(bundle = outState))
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        val str = savedInstanceState.getString(KEY)
-        if (str?.isNotEmpty() == true) {
-            val list = gson.fromJson(str, Array<String>::class.java).toList()
-            adapter.replace(list)
-        }
-    }
-
-    companion object {
-        private const val KEY = "key"
+        vm.restore(BundleWrapper.Base(savedInstanceState))
     }
 
 }
 
 private class Adapter: RecyclerView.Adapter<Adapter.Holder>() {
 
-    private var items = mutableListOf<String>()
+    val diffUtil = object: DiffUtil.ItemCallback<String>() {
+        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+            return oldItem == newItem
+        }
+    }
+    private val asyncDiffList = AsyncListDiffer(this, diffUtil)
 
     class Holder(
         private val binding: ElementViewBinding
@@ -71,22 +77,14 @@ private class Adapter: RecyclerView.Adapter<Adapter.Holder>() {
         return Holder(binding = binding)
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = asyncDiffList.currentList.size
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.apply(item = items[position])
-    }
-
-    fun add(item: String) {
-        items.add(item)
-        notifyDataSetChanged()
+        holder.apply(item = asyncDiffList.currentList[position])
     }
 
     fun replace(list: List<String>) {
-        items = list.toMutableList()
-        notifyDataSetChanged()
+        asyncDiffList.submitList(list)
     }
-
-    fun items(): List<String> = items
 
 }
