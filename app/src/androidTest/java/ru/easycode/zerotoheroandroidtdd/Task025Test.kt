@@ -13,16 +13,16 @@ import ru.easycode.zerotoheroandroidtdd.main.MainActivity
  * Instructions to go through this task:
  *
  * 1. Please start with MainViewModelTest
- * @see ru.easycode.zerotoheroandroidtdd.main.MainViewModelTest
+ * @see ru.easycode.zerotoheroandroidtdd.main.MainViewModelTest *
  *
  * 2. Then please solve ViewModelFactoryTest
- * @see ru.easycode.zerotoheroandroidtdd.core.ViewModelFactoryTest
+ * @see ru.easycode.zerotoheroandroidtdd.core.ViewModelFactoryTest *
  *
  * 3. Then need to solve ListViewModelTest#test_navigation
- * @see ru.easycode.zerotoheroandroidtdd.list.ListViewModelTest
+ * @see ru.easycode.zerotoheroandroidtdd.list.ListViewModelTest * / 2
  *
  * 4. So now you can solve 4 tests here
- * @see test_navigate_to_create_screen
+ * @see test_navigate_to_create_screen *
  * @see test_navigate_to_create_screen_and_comeback
  * @see test_input_not_enough_text_and_comeback
  * @see test_input_enough_text_and_comeback
