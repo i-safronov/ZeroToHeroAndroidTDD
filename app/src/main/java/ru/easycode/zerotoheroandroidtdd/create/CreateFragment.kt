@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.core.widget.addTextChangedListener
 import ru.easycode.zerotoheroandroidtdd.core.AbstractFragment
@@ -15,17 +16,19 @@ class CreateFragment : AbstractFragment<FragmentCreateBinding>() {
 
     private lateinit var viewModel: CreateViewModel
 
+    private val backPressHandler = object: OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            viewModel.comeback()
+        }
+    }
+
     override fun bind(inflater: LayoutInflater, container: ViewGroup?): FragmentCreateBinding =
         FragmentCreateBinding.inflate(inflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val newVM = (activity as ProvideViewModel).viewModel(CreateViewModel::class.java)
         viewModel = (activity as ProvideViewModel).viewModel(CreateViewModel::class.java)
-
-        requireActivity().onBackPressedDispatcher.addCallback {
-            viewModel.comeback()
-        }
+        requireActivity().onBackPressedDispatcher.addCallback(backPressHandler)
 
         binding.inputEditText.addTextChangedListener {
             binding.createButton.isEnabled =
@@ -36,6 +39,11 @@ class CreateFragment : AbstractFragment<FragmentCreateBinding>() {
             hideKeyboard()
             viewModel.add(binding.inputEditText.text.toString().trim())
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        backPressHandler.remove()
     }
 
     companion object {
