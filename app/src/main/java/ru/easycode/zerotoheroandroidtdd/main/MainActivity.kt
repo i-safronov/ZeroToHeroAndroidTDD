@@ -3,6 +3,7 @@ package ru.easycode.zerotoheroandroidtdd.main
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
+import ru.easycode.zerotoheroandroidtdd.core.BaseViewModel
 import ru.easycode.zerotoheroandroidtdd.core.ProvideViewModel
 import ru.easycode.zerotoheroandroidtdd.databinding.ActivityMainBinding
 
@@ -25,6 +26,6 @@ class MainActivity : AppCompatActivity(), ProvideViewModel {
 
     }
 
-    override fun <T : ViewModel> viewModel(viewModelClass: Class<T>): T = (application as ProvideViewModel).viewModel(viewModelClass = viewModelClass)
+    override fun <T : BaseViewModel> viewModel(viewModelClass: Class<T>): T = (application as ProvideViewModel).viewModel(viewModelClass = viewModelClass)
 
 }

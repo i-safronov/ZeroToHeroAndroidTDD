@@ -23,22 +23,22 @@ import ru.easycode.zerotoheroandroidtdd.main.MainActivity
  *
  * 4. So now you can solve 4 tests here
  * @see test_navigate_to_create_screen *
- * @see test_navigate_to_create_screen_and_comeback
- * @see test_input_not_enough_text_and_comeback
- * @see test_input_enough_text_and_comeback
+ * @see test_navigate_to_create_screen_and_comeback *
+ * @see test_input_not_enough_text_and_comeback *
+ * @see test_input_enough_text_and_comeback *
  *
  * 5. To go forward you will need to solve CreateViewModelTest
- * @see ru.easycode.zerotoheroandroidtdd.create.CreateViewModelTest
+ * @see ru.easycode.zerotoheroandroidtdd.create.CreateViewModelTest *
  *
  * 6.So now you can go with next 2 tests here
- * @see test_create_one_item
- * @see test_create_many_items
+ * @see test_create_one_item *
+ * @see test_create_many_items *
  *
  * 7. Before the last test here you will need to solve ListViewModelTest#test_save_and_restore
- * @see ru.easycode.zerotoheroandroidtdd.list.ListViewModelTest
+ * @see ru.easycode.zerotoheroandroidtdd.list.ListViewModelTest *
  *
  * 8. And finally you can solve the last test
- * @see test_save_and_restore
+ * @see test_save_and_restore *
  */
 @RunWith(AndroidJUnit4::class)
 class Task025Test {

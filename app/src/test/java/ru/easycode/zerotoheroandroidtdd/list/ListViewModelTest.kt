@@ -32,20 +32,20 @@ class ListViewModelTest {
         navigation.checkUpdateCalled(listOf(CreateScreen))
     }
 
-//    @Test
-//    fun test_save_and_restore() {
-//        liveDataWrapper.update(listOf("1", "2", "3"))
-//        val bundleWrapper = FakeBundleWrapper.Base()
-//        val save: BundleWrapper.Save = bundleWrapper
-//        val restore: BundleWrapper.Restore = bundleWrapper
-//
-//        viewModel.save(bundleWrapper = save)
-//
-//        setup()
-//
-//        viewModel.restore(bundleWrapper = restore)
-//        liveDataWrapper.checkCalledList(listOf("1", "2", "3"))
-//    }
+    @Test
+    fun test_save_and_restore() {
+        liveDataWrapper.update(listOf("1", "2", "3"))
+        val bundleWrapper = FakeBundleWrapper.Base()
+        val save: BundleWrapper.Save = bundleWrapper
+        val restore: BundleWrapper.Restore = bundleWrapper
+
+        viewModel.save(bundleWrapper = save)
+
+        setup()
+
+        viewModel.restore(bundleWrapper = restore)
+        liveDataWrapper.checkCalledList(listOf("1", "2", "3"))
+    }
 }
 
 private interface FakeBundleWrapper : BundleWrapper.Mutable {

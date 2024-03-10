@@ -114,13 +114,19 @@ private interface FakeProvideViewModel : ProvideViewModel {
             assertEquals(expected, list)
         }
 
-        override fun <T : ViewModel> viewModel(viewModelClass: Class<T>): T {
+        override fun <T : BaseViewModel> viewModel(viewModelClass: Class<T>): T {
             list.add(viewModelClass)
             return viewModelClass.getDeclaredConstructor().newInstance()
         }
     }
 }
 
-private class FakeViewModelOne : ViewModel()
+private class FakeViewModelOne : BaseViewModel() {
+    override fun clear() {
+    }
+}
 
-private class FakeViewModelTwo : ViewModel()
+private class FakeViewModelTwo : BaseViewModel() {
+    override fun clear() {
+    }
+}
